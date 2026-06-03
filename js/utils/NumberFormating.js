@@ -28,7 +28,7 @@ function sumValues(x) {
     return x.reduce((a, b) => ExpantaNum.add(a, b))
 }
 
-function format(decimal, precision = 2, small=false) {
+function format(decimal, precision = 4, small=false) {
     small = small || modInfo.allowSmall
     decimal = new ExpantaNum(decimal)
     let fmt = decimal.toString(precision)
