@@ -294,3 +294,72 @@ addLayer("b", {
     },
     layerShown() {return true}
 })
+
+addLayer("ach", {
+    name: "Class Negative A", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "[-1A]", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+		points: new ExpantaNum(0),
+    }},
+    color: "#9ecc21",
+    requires: new ExpantaNum(0), // Can be a function that takes requirement increases into account
+    resource: "Achievements", // Name of prestige currency
+    baseResource: "points", // Name of resource prestige is based on
+    baseAmount() {return player.points}, // Get the current amount of baseResource
+    type: "none", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 4.3215, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new ExpantaNum(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new ExpantaNum(1)
+    },
+    row: "side", // Row the layer is in on the tree (0 is the first row)
+
+tabFormat: {
+    "Achievement Set 1": {
+        content: ["main-display","blank", ["infobox", "lore"], "blank", "achievements"],
+        
+    },
+    "Secret Achievements": {
+        content: ["blank"]
+    },
+},
+    
+
+achievements: {
+    11: {
+        name: "Reality's Big Bang",
+    tooltip: "literally just start the game [No AP]",
+    done() { return true }
+    },
+     12: {
+        name: "The Basic Beginning",
+    tooltip: "Get the First Genesis Upgrade",
+    done() { return hasUpgrade("c", 11) }
+    },
+    13: {
+        name: "Try again",
+    tooltip: "Reach Attempt #2",
+    done() { return player.r.points.gte(2) }
+    },
+     14: {
+        name: "Ascending Beyond Genesis",
+    tooltip: "Reach Attempt #5",
+    done() { return player.r.points.gte(5) }
+    },
+},
+    infoboxes: {
+        lore: {
+        title: "Achievements",
+        body() { return "Achievements are a way to see how far you progressed so far, Now let's get into the first set, The first set includes every achievement from Genesis to Class 1, Some achievements have rewards too." },
+        
+    },
+},
+    layerShown() {return true}
+})
+
+
