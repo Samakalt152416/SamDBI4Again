@@ -19,46 +19,31 @@ function regularFormat(num, precision) {
 }
 
 function fixValue(x, y = 0) {
-    return x || new ExpantaNum(y)
+    return x || new MetaNum(y)
 }
 
 function sumValues(x) {
     x = Object.values(x)
-    if (!x[0]) return new ExpantaNum(0)
-    return x.reduce((a, b) => ExpantaNum.add(a, b))
+    if (!x[0]) return new MetaNum(0)
+    return x.reduce((a, b) => MetaNum.add(a, b))
 }
-
 function format(decimal, precision = 4, small=false) {
     small = small || modInfo.allowSmall
-    decimal = new ExpantaNum(decimal)
-    let fmt = decimal.toString(precision)
-    if(decimal.gte(1000)&&decimal.lt("10^^5")){
+    decimal = new MetaNum(decimal)
     let fmt = decimal.toStringWithDecimalPlaces(precision)
-      return fmt}
-    else if(precision>0){
-      if(fmt.split(".").length==1){fmt=fmt+".00"}
-      else if(fmt.split(".")[1].length==1){fmt=fmt+"0"}
+    if (decimal.gte(1000000)) {
+        if (decimal.lt("10^^10")) {
+       return decimal.toExponential(precision)
+        }
     }
-    else if(decimal.lte(0.001) &&small&&decimal.gt(0)){
-        decimal = decimal.pow(-1)
-        let val = ""
-    if (decimal.lt("1e1000")){
-        val = exponentialFormat(decimal, precision)
-        return val.replace(/([^(?:e|F)]*)$/, '-$1')
+    if (decimal.lt(1)) {
+        let infinisim = MetaNum(1).div(decimal).toStringWithDecimalPlaces(precision)
+    if (decimal.eq(0)) {
+return "0"
     }
-    else   
-        return format(decimal, precision) + "⁻¹"
+return "(1/"+infinisim+")"
     }
-    if(fmt.split(".").length>1&&precision==0){
-        fmt=fmt.split(".")[0]
-      
-    }
-  if(fmt.split(".").length>1&&precision>0){
-    if(fmt.split(".")[1].length>precision){
-      let f=fmt.split(".")
-      fmt=f[0]+"."+f[1].substring(0,precision)
-    }
-  }
+   
   return fmt
 }
 
@@ -75,10 +60,10 @@ function formatTime(s) {
 }
 
 function toPlaces(x, precision, maxAccepted) {
-    x = new ExpantaNum(x)
+    x = new MetaNum(x)
     let result = x.toString(precision)
-    if (new ExpantaNum(result).gte(maxAccepted)) {
-        result = new ExpantaNum(maxAccepted - Math.pow(0.1, precision)).toString(precision)
+    if (new MetaNum(result).gte(maxAccepted)) {
+        result = new MetaNum(maxAccepted - Math.pow(0.1, precision)).toString(precision)
     }
     return result
 }

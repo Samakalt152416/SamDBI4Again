@@ -13,7 +13,7 @@ function canAffordUpgrade(layer, id) {
 	let upg = tmp[layer].upgrades[id]
 	if(tmp[layer].deactivated) return false
 	if (tmp[layer].upgrades[id].canAfford !== undefined) return tmp[layer].upgrades[id].canAfford
-	let cost = tmp[layer].upgrades[id].cost
+	let cost = tmp[layer].upgrades[id].cost.div(tmp[layer].discount)
 	return canAffordPurchase(layer, upg, cost)
 }
 
@@ -59,7 +59,7 @@ function buyUpg(layer, id) {
 	if (pay !== undefined)
 		run(pay, layers[layer].upgrades[id])
 	else {
-		let cost = tmp[layer].upgrades[id].cost
+		let cost = tmp[layer].upgrades[id].cost.div(tmp[layer].discount)
 
 		if (upg.currencyInternalName) {
 			let name = upg.currencyInternalName
@@ -182,7 +182,7 @@ function goBack(layer) {
 
 function layOver(obj1, obj2) {
 	for (let x in obj2) {
-		if (obj2[x] instanceof ExpantaNum) obj1[x] = new ExpantaNum(obj2[x])
+		if (obj2[x] instanceof MetaNum) obj1[x] = new MetaNum(obj2[x])
 		else if (obj2[x] instanceof Object) layOver(obj1[x], obj2[x]);
 		else obj1[x] = obj2[x];
 	}
@@ -343,9 +343,9 @@ document.title = modInfo.name
 
 // Converts a string value to whatever it's supposed to be
 function toValue(value, oldValue) {
-	if (oldValue instanceof ExpantaNum) {
-		value = new ExpantaNum (value)
-		if (value.eq(ExpantaNumNaN)) return ExpantaNumZero
+	if (oldValue instanceof MetaNum) {
+		value = new MetaNum (value)
+		if (value.eq(MetaNumNaN)) return MetaNumZero
 		return value
 	}
 	if (!isNaN(oldValue)) 
