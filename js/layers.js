@@ -377,7 +377,7 @@ addLayer("b", {
         done() { return player[this.layer].points.gte(2) }
     },
      3: {
-        requirementDescription: "Definition #3 - Progressionz!!",
+        requirementDescription: "Definition #3 - Progression",
         effectDescription: function() {
             let amount = new MetaNum(1.8)
            return "Every definition gives x"+amount+" skill gain compounding"},
